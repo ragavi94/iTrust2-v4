@@ -87,6 +87,7 @@
 		<module name="UpperEll" />
 		<module name="CyclomaticComplexity">
 			<property name="max" value="15" />
+			<property name="severity" value="error"/>
 		</module>
 	</module>
 </module>
