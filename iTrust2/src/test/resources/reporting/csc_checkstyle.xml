@@ -25,12 +25,19 @@
 		<module name="LocalVariableName" />
 		<module name="MemberName" />
 		<module name="MethodName" />
+	    <module name="MethodCount">
+      		<property name="maxTotal" value="15"/>
+      		<property name="severity" value="warning"/>
+    	</module>
 		<module name="PackageName" />
 		<module name="ParameterName" />
 		<module name="StaticVariableName" />
 		<module name="TypeName" />
 		<module name="UnusedImports" />
 		<!--<module name="ParameterNumber"/> -->
+		<module name="SingleSpaceSeparator">
+	    	<property name="severity" value="warning"/>
+    	</module>
 		<module name="NoWhitespaceAfter">
 			<property name="allowLineBreaks" value="false" />
 			<property name="tokens"
