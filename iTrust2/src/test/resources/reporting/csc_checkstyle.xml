@@ -35,9 +35,6 @@
 		<module name="TypeName" />
 		<module name="UnusedImports" />
 		<!--<module name="ParameterNumber"/> -->
-		<module name="SingleSpaceSeparator">
-	    		<property name="severity" value="warning"/>
-    		</module>
 		<module name="NoWhitespaceAfter">
 			<property name="allowLineBreaks" value="false" />
 			<property name="tokens"
