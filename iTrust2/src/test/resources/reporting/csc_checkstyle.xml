@@ -72,6 +72,14 @@
 		</module>
 		<module name="MissingSwitchDefault" />
 		<module name="SimplifyBooleanExpression" />
+		<module name="BooelanExpressionComplexity">
+      			<property name="max" value="3"/>
+      			<property name="severity" value="error"/>
+    		</module>
+    		<module name="NestedIfDepth">
+      			<property name="max" value="2"/>
+      			<property name="severity" value="error"/>
+    		</module>
 		<module name="SimplifyBooleanReturn" />
 		<module name="StringLiteralEquality" />
 		<module name="InnerAssignment" />
