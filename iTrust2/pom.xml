@@ -535,6 +535,24 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.17</version>
+				<executions>
+					<execution>
+						<configuration>
+							<consoleOutput>true</consoleOutput>
+							<failOnViolation>false</failOnViolation>
+							<failsonError>false</failsonError>
+							<linkXRef>false</linkXRef>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin> 
 		</plugins>
 	</build>
 	<reporting>
@@ -543,6 +561,12 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.17</version>
+				<configuration>
+       					<failOnViolation>false</failOnViolation>
+					<failsonError>false</failsonError>
+					<consoleOutput>true</consoleOutput>
+					
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>
