@@ -136,3 +136,4 @@ public class PatientController {
         return "/patient/foodDiary/viewFoodDiaryEntries";
     }
 }
+

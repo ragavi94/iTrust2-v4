@@ -99,7 +99,7 @@ public class APIGeneralOphthalmologyController extends APIController {
         try {
             final GeneralOphthalmology visit = new GeneralOphthalmology( visitF );
 
-            if ( null != GeneralOphthalmology.getById( visit.getId() ) ) {
+            if ( null == GeneralOphthalmology.getById( visit.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "Office visit with the id " + visit.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
@@ -178,7 +178,7 @@ public class APIGeneralOphthalmologyController extends APIController {
     public ResponseEntity viewGeneralOphthalmology ( @PathVariable final Long id,
             @RequestBody final GeneralOphthalmologyForm form ) {
         final GeneralOphthalmology dbVisit = GeneralOphthalmology.getById( id );
-        if ( null != dbVisit ) {
+        if ( null == dbVisit ) {
             return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
         }
         LoggerUtil.log( TransactionType.GENERAL_OPHTHALMOLOGY_HCP_VIEW, form.getHcp(), form.getPatient(),
@@ -210,4 +210,5 @@ public class APIGeneralOphthalmologyController extends APIController {
     }
 
 }
+
 

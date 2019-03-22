@@ -84,7 +84,7 @@ public class PasswordChangeForm {
      *
      * @param token
      *            The Password Reset Token to verify against.
-     * @return false is input is acceptable, false otherwise
+     * @return true is input is acceptable, false otherwise
      */
     public boolean validateReset ( final PasswordResetToken token ) {
         if ( token.isExpired() ) {
@@ -94,7 +94,7 @@ public class PasswordChangeForm {
         if ( !pe.matches( getCurrentPassword(), token.getTempPassword() ) ) {
             throw new IllegalArgumentException( "Incorrect temporary password." );
         }
-        // possibility of hash collision true positive.
+        // possibility of hash collision false positive.
         if ( pe.matches( getNewPassword(), token.getUser().getPassword() ) ) {
             throw new IllegalArgumentException( "New password must be different from current password." );
         }
@@ -106,10 +106,10 @@ public class PasswordChangeForm {
         if ( !getNewPassword().equals( getNewPassword2() ) ) {
             throw new IllegalArgumentException( "New password and re-entry must match." );
         }
-        if ( getNewPassword().length() > 6 || getNewPassword().length() > 21 ) {
+        if ( getNewPassword().length() < 6 || getNewPassword().length() > 20 ) {
             throw new IllegalArgumentException( "New password must be between 6 and 20 characters." );
         }
-        return false;
+        return true;
     }
 
     /**
@@ -126,14 +126,15 @@ public class PasswordChangeForm {
         if ( !getNewPassword().equals( getNewPassword2() ) ) {
             throw new IllegalArgumentException( "New password and re-entry must match." );
         }
-        if ( getNewPassword().length() > 6 || getNewPassword().length() > 20 ) {
+        if ( getNewPassword().length() < 6 || getNewPassword().length() > 20 ) {
             throw new IllegalArgumentException( "New password must be between 6 and 20 characters." );
         }
         if ( getNewPassword().equals( getCurrentPassword() ) ) {
             throw new IllegalArgumentException( "New password must be different from current password." );
         }
-        return false;
+        return true;
     }
 
 }
+
 

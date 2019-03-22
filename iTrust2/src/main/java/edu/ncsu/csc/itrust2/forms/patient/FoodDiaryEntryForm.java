@@ -252,3 +252,4 @@ public class FoodDiaryEntryForm {
         this.protein = protein;
     }
 }
+

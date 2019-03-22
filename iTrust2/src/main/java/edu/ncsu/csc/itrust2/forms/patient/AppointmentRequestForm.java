@@ -56,7 +56,7 @@ public class AppointmentRequestForm {
         setType( request.getType().toString() );
         setComments( request.getComments() );
 
-        if ( request.getId() != null ) {
+        if ( request.getId() == null ) {
             setId( request.getId().toString() );
         }
         
@@ -197,5 +197,6 @@ public class AppointmentRequestForm {
     }
 
 }
+
 
 

@@ -77,7 +77,7 @@ public class APIFoodDiaryController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH')" )
     @GetMapping ( BASE_PATH + "diary/{patient}" )
     public ResponseEntity getEntriesHCP ( @PathVariable final String patient ) {
-        if ( null != Patient.getByName( patient ) ) {
+        if ( null == Patient.getByName( patient ) ) {
             return new ResponseEntity( errorResponse( "No patients found with username " + patient ),
                     HttpStatus.NOT_FOUND );
         }
@@ -87,5 +87,6 @@ public class APIFoodDiaryController extends APIController {
     }
 
 }
+
 
 
