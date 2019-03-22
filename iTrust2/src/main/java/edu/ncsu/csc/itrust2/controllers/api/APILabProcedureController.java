@@ -107,7 +107,7 @@ public class APILabProcedureController extends APIController {
         final boolean isOPH = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .contains( new SimpleGrantedAuthority( "ROLE_OPH" ) );
         if ( isHCP || isOD || isOPH ) {
-            if ( ov == null ) {
+            if ( ov != null ) {
                 logCode = TransactionType.HCP_VIEW_PROCS;
                 procs = LabProcedure.getForVisit( id );
                 LoggerUtil.log( logCode, LoggerUtil.currentUser(), null,
@@ -193,7 +193,7 @@ public class APILabProcedureController extends APIController {
     public ResponseEntity createLabProcedure ( @RequestBody final LabProcedureForm procF ) {
         try {
             final LabProcedure proc = new LabProcedure( procF );
-            if ( LabProcedure.getById( proc.getId() ) == null ) {
+            if ( LabProcedure.getById( proc.getId() ) != null ) {
                 return new ResponseEntity(
                         errorResponse( "LabProcedure with the id " + proc.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
@@ -223,7 +223,7 @@ public class APILabProcedureController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH')" )
     public ResponseEntity deleteLabProcedure ( @PathVariable final Long id ) {
         final LabProcedure proc = LabProcedure.getById( id );
-        if ( proc != null ) {
+        if ( proc == null ) {
             return new ResponseEntity( errorResponse( "No LabProcedure found for " + id ), HttpStatus.NOT_FOUND );
         }
 
@@ -274,7 +274,7 @@ public class APILabProcedureController extends APIController {
                         HttpStatus.CONFLICT );
             }
             final LabProcedure dbProcedure = LabProcedure.getById( id );
-            if ( dbProcedure != null ) {
+            if ( dbProcedure == null ) {
                 return new ResponseEntity( errorResponse( "No LabProcedure found for id " + id ),
                         HttpStatus.NOT_FOUND );
             }
@@ -305,5 +305,6 @@ public class APILabProcedureController extends APIController {
         }
     }
 }
+
 
 
