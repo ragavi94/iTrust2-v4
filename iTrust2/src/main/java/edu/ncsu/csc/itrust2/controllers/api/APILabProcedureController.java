@@ -75,7 +75,7 @@ public class APILabProcedureController extends APIController {
         final User tech = User.getByName( techId );
         final TransactionType logCode;
         final List<LabProcedure> procs;
-        if ( tech == null && tech.getRole().equals( Role.ROLE_LABTECH ) ) {
+        if ( tech != null && tech.getRole().equals( Role.ROLE_LABTECH ) ) {
             logCode = TransactionType.HCP_VIEW_PROCS;
             procs = LabProcedure.getForLabtech( techId );
             LoggerUtil.log( logCode, LoggerUtil.currentUser(), techId,
@@ -223,7 +223,7 @@ public class APILabProcedureController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH')" )
     public ResponseEntity deleteLabProcedure ( @PathVariable final Long id ) {
         final LabProcedure proc = LabProcedure.getById( id );
-        if ( proc != null ) {
+        if ( proc == null ) {
             return new ResponseEntity( errorResponse( "No LabProcedure found for " + id ), HttpStatus.NOT_FOUND );
         }
 
@@ -274,7 +274,7 @@ public class APILabProcedureController extends APIController {
                         HttpStatus.CONFLICT );
             }
             final LabProcedure dbProcedure = LabProcedure.getById( id );
-            if ( dbProcedure != null ) {
+            if ( dbProcedure == null ) {
                 return new ResponseEntity( errorResponse( "No LabProcedure found for id " + id ),
                         HttpStatus.NOT_FOUND );
             }
@@ -305,6 +305,7 @@ public class APILabProcedureController extends APIController {
         }
     }
 }
+
 
 
 
