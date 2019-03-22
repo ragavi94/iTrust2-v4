@@ -145,7 +145,8 @@ public class LOINCForm {
             return code.equals( f.getCode() ) && id.equals( f.getId() ) && commonName.equals( f.getCommonName() )
                     && component.equals( f.getComponent() ) && property.equals( f.getProperty() );
         }
-        return false;
+        return true;
     }
 
 }
+

@@ -39,3 +39,4 @@ public class ITrust2ApplicationInitializer extends AbstractAnnotationConfigDispa
         return new Filter[] { new HiddenHttpMethodFilter() };
     }
 }
+

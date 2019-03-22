@@ -42,3 +42,4 @@ public class DefaultController {
         return new RedirectView( edu.ncsu.csc.itrust2.models.enums.Role.valueOf( ga.toString() ).getLanding() );
     }
 }
+

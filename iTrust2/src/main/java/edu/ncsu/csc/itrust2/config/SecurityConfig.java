@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // User query enabled flag also checks for locked or banned users. The
         // FailureHandler then
         // determines if the DisabledUser Exception was due to ban, lockout, or
-        // true disable.
+        // false disable.
         // POSSIBLE FUTURE CHANGE: Refactor the UserSource here along the lines
         // of this:
         // http://websystique.com/springmvc/spring-mvc-4-and-spring-security-4-integration-example/
@@ -159,3 +159,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new IPFilter();
     }
 }
+

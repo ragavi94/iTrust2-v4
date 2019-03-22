@@ -206,3 +206,4 @@ public abstract class OphthalmologyVisitForm extends OfficeVisitForm {
         this.axisOS = axisOS;
     }
 }
+

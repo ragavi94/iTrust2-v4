@@ -48,3 +48,4 @@ public class OphthalmologySurgeryForm extends OphthalmologyVisitForm {
         this.surgeryType = surgeryType;
     }
 }
+

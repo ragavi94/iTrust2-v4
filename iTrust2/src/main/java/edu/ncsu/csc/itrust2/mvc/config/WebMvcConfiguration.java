@@ -131,3 +131,4 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         return new DomainClassConverter<FormattingConversionService>( mvcConversionService );
     }
 }
+

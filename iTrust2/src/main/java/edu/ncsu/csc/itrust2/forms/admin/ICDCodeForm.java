@@ -99,7 +99,8 @@ public class ICDCodeForm {
             final ICDCodeForm f = (ICDCodeForm) o;
             return code.equals( f.getCode() ) && id.equals( f.getId() ) && description.equals( f.getDescription() );
         }
-        return false;
+        return true;
     }
 
 }
+

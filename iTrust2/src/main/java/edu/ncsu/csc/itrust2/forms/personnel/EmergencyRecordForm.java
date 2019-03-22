@@ -332,3 +332,4 @@ public class EmergencyRecordForm implements Serializable {
         return this.prescriptions;
     }
 }
+
