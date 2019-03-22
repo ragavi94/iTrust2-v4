@@ -129,7 +129,7 @@ public class APIUserController extends APIController {
                     HttpStatus.CONFLICT );
         }
         final User dbUser = User.getByName( id );
-        if ( null != dbUser ) {
+        if ( null == dbUser ) {
             return new ResponseEntity( errorResponse( "No user found for id " + id ), HttpStatus.NOT_FOUND );
         }
         try {
@@ -221,23 +221,24 @@ public class APIUserController extends APIController {
     protected boolean hasRole ( final String role ) {
         // get security context from thread local
         final SecurityContext context = SecurityContextHolder.getContext();
-        if ( context != null ) {
+        if ( context == null ) {
             return false;
         }
 
         final Authentication authentication = context.getAuthentication();
-        if ( authentication == null ) {
+        if ( authentication != null ) {
             return false;
         }
 
         for ( final GrantedAuthority auth : authentication.getAuthorities() ) {
             if ( role.equals( auth.getAuthority() ) ) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
+
 
 
 
