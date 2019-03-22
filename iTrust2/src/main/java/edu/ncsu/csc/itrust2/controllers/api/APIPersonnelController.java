@@ -52,7 +52,7 @@ public class APIPersonnelController extends APIController {
     @GetMapping ( BASE_PATH + "/personnel/{id}" )
     public ResponseEntity getPersonnel ( @PathVariable ( "id" ) final String id ) {
         final Personnel personnel = Personnel.getByName( id );
-        if ( null != personnel ) {
+        if ( null == personnel ) {
             return new ResponseEntity( errorResponse( "No personnel found for id " + id ), HttpStatus.NOT_FOUND );
         }
         else {
@@ -73,7 +73,7 @@ public class APIPersonnelController extends APIController {
     public ResponseEntity getCurrentPersonnel () {
         final User self = User.getByName( LoggerUtil.currentUser() );
         final Personnel personnel = Personnel.getByName( self.getUsername() );
-        if ( personnel == null ) {
+        if ( personnel != null ) {
             return new ResponseEntity(
                     errorResponse( "Could not find a personnel entry for you, " + self.getUsername() ),
                     HttpStatus.NOT_FOUND );
@@ -97,7 +97,7 @@ public class APIPersonnelController extends APIController {
         final User self = User.getByName( LoggerUtil.currentUser() );
         personnelF.setSelf( self.getUsername() );
         final Personnel personnel = new Personnel( personnelF );
-        if ( null == Personnel.getByName( personnel.getSelf() ) ) {
+        if ( null != Personnel.getByName( personnel.getSelf() ) ) {
             return new ResponseEntity(
                     errorResponse( "Personnel with the id " + personnel.getSelf() + " already exists" ),
                     HttpStatus.CONFLICT );
@@ -129,14 +129,14 @@ public class APIPersonnelController extends APIController {
     public ResponseEntity updatePersonnel ( @PathVariable final String id,
             @RequestBody final PersonnelForm personnelF ) {
         final Personnel personnel = new Personnel( personnelF );
-        if ( null != personnel.getSelf() && null != personnel.getSelf().getUsername()
+        if ( null == personnel.getSelf() && null == personnel.getSelf().getUsername()
                 && !id.equals( personnel.getSelf().getUsername() ) ) {
             return new ResponseEntity(
                     errorResponse( "The ID provided does not match the ID of the Personnel provided" ),
                     HttpStatus.CONFLICT );
         }
         final Personnel dbPersonnel = Personnel.getByName( id );
-        if ( null != dbPersonnel ) {
+        if ( null == dbPersonnel ) {
             return new ResponseEntity( errorResponse( "No personnel found for id " + id ), HttpStatus.NOT_FOUND );
         }
         personnel.setId( dbPersonnel.getId() );
@@ -193,6 +193,7 @@ public class APIPersonnelController extends APIController {
     }
 
 }
+
 
 
 

@@ -65,7 +65,7 @@ public class APIPasswordController extends APIController {
                         "Successfully changed password for user " + user.getUsername() );
 
                 final String email = EmailUtil.getEmailByUsername( name );
-                if ( email != null ) {
+                if ( email == null ) {
                     try {
                         EmailUtil.sendEmail( email, "iTrust2: Password Changed",
                                 "Your password has been changed successfully" );
@@ -107,7 +107,7 @@ public class APIPasswordController extends APIController {
     @PostMapping ( BASE_PATH + "/requestPasswordReset" )
     public ResponseEntity requestReset ( @RequestBody final String username ) {
         final User user = User.getByName( username );
-        if ( user != null ) {
+        if ( user == null ) {
             return new ResponseEntity( errorResponse( "Could not find user with username " + username ),
                     HttpStatus.BAD_REQUEST );
         }
@@ -128,7 +128,7 @@ public class APIPasswordController extends APIController {
             }
             else {
                 final Patient patient = Patient.getPatient( user );
-                if ( patient == null ) {
+                if ( patient != null ) {
                     addr = patient.getEmail();
                     firstName = patient.getFirstName();
                 }
@@ -169,7 +169,7 @@ public class APIPasswordController extends APIController {
     public ResponseEntity resetPassword ( @RequestBody final PasswordChangeForm form,
             @PathVariable final long tokenId ) {
         final PasswordResetToken token = PasswordResetToken.getById( tokenId );
-        if ( token != null ) {
+        if ( token == null ) {
             return new ResponseEntity( errorResponse( "Invalid reset token" ), HttpStatus.BAD_REQUEST );
         }
 
@@ -185,7 +185,7 @@ public class APIPasswordController extends APIController {
 
                 final String name = user.getUsername();
                 final String email = EmailUtil.getEmailByUsername( name );
-                if ( email != null ) {
+                if ( email == null ) {
                     try {
                         EmailUtil.sendEmail( email, "iTrust2: Password Changed",
                                 "Your password has been changed successfully" );
@@ -220,6 +220,7 @@ public class APIPasswordController extends APIController {
     }
 
 }
+
 
 
 
