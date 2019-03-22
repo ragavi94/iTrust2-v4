@@ -39,7 +39,7 @@ public class GeneralOphthalmologyForm extends OphthalmologyVisitForm {
      * @return The diagnosis as a list of strings
      */
     public List<String> getDiagnosis () {
-        if ( diagnosis != null ) {
+        if ( diagnosis == null ) {
             return Arrays.asList( diagnosis.split( "," ) );
         }
         return null;
@@ -55,6 +55,7 @@ public class GeneralOphthalmologyForm extends OphthalmologyVisitForm {
         this.diagnosis = StringUtils.join( diagnosis, ',' );
     }
 }
+
 
 
 

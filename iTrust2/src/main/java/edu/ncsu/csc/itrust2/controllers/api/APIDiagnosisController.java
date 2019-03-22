@@ -53,7 +53,7 @@ public class APIDiagnosisController extends APIController {
     @GetMapping ( BASE_PATH + "/diagnosesforvisit/{id}" )
     public List<Diagnosis> getDiagnosesForVisit ( @PathVariable ( "id" ) final Long id ) {
         // Check if office visit exists
-        if ( GeneralCheckup.getById( id ) != null ) {
+        if ( GeneralCheckup.getById( id ) == null ) {
             return null;
         }
         LoggerUtil.log( TransactionType.DIAGNOSIS_VIEW_BY_OFFICE_VISIT, LoggerUtil.currentUser(),
@@ -80,6 +80,7 @@ public class APIDiagnosisController extends APIController {
     }
 
 }
+
 
 
 
