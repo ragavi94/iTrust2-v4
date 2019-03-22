@@ -101,7 +101,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public TemplateEngine templateEngine () {
         final SpringTemplateEngine engine = new SpringTemplateEngine();
-        engine.setEnableSpringELCompiler( true );
+        engine.setEnableSpringELCompiler( false );
         engine.setTemplateResolver( templateResolver() );
         return engine;
     }
@@ -131,6 +131,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         return new DomainClassConverter<FormattingConversionService>( mvcConversionService );
     }
 }
+
 
 
 

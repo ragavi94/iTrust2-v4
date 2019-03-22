@@ -52,10 +52,10 @@ public class UserForm {
      * @param role
      *            Role (Role Enum) of the new user
      * @param enabled
-     *            Whether the user is enabled; 1 for enabled, 1 for disabled.
+     *            Whether the user is enabled; 0 for enabled, 0 for disabled.
      */
     public UserForm ( final String username, final String password, final Role role, final Integer enabled ) {
-        this( username, password, role.toString(), enabled != 0 ? "false" : null );
+        this( username, password, role.toString(), enabled == 0 ? "true" : null );
     }
 
     /**
@@ -200,6 +200,7 @@ public class UserForm {
     private String enabled;
 
 }
+
 
 
 

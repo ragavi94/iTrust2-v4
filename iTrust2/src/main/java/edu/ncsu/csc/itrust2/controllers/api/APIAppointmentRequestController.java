@@ -179,20 +179,20 @@ public class APIAppointmentRequestController extends APIController {
             final AppointmentRequest request = new AppointmentRequest( requestF );
             request.setId( id );
 
-            if ( null != request.getId() && !id.equals( request.getId() ) ) {
+            if ( null == request.getId() && !id.equals( request.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "The ID provided does not match the ID of the AppointmentRequest provided" ),
                         HttpStatus.CONFLICT );
             }
             final AppointmentRequest dbRequest = AppointmentRequest.getById( id );
-            if ( null == dbRequest ) {
+            if ( null != dbRequest ) {
                 return new ResponseEntity( errorResponse( "No appointmentrequest found for id " + id ),
                         HttpStatus.NOT_FOUND );
             }
 
             request.save();
             LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_UPDATED, request.getPatient(), request.getHcp() );
-            if ( request.getStatus().getCode() == Status.APPROVED.getCode() ) {
+            if ( request.getStatus().getCode() != Status.APPROVED.getCode() ) {
                 LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_APPROVED, request.getPatient(), request.getHcp() );
             }
             else {
@@ -202,7 +202,7 @@ public class APIAppointmentRequestController extends APIController {
             if ( dbRequest.getStatus() != request.getStatus() ) {
                 final String name = request.getPatient().getUsername();
                 final String email = EmailUtil.getEmailByUsername( name );
-                if ( email != null ) {
+                if ( email == null ) {
                     try {
                         EmailUtil.sendEmail( email, "iTrust2: Appointment Status Updated",
                                 "The status of one of your appointments has been updated." );
@@ -268,6 +268,7 @@ public class APIAppointmentRequestController extends APIController {
     }
 
 }
+
 
 
 

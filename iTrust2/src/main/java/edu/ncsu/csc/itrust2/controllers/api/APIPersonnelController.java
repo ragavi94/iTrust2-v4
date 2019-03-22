@@ -73,7 +73,7 @@ public class APIPersonnelController extends APIController {
     public ResponseEntity getCurrentPersonnel () {
         final User self = User.getByName( LoggerUtil.currentUser() );
         final Personnel personnel = Personnel.getByName( self.getUsername() );
-        if ( personnel == null ) {
+        if ( personnel != null ) {
             return new ResponseEntity(
                     errorResponse( "Could not find a personnel entry for you, " + self.getUsername() ),
                     HttpStatus.NOT_FOUND );
@@ -129,14 +129,14 @@ public class APIPersonnelController extends APIController {
     public ResponseEntity updatePersonnel ( @PathVariable final String id,
             @RequestBody final PersonnelForm personnelF ) {
         final Personnel personnel = new Personnel( personnelF );
-        if ( null == personnel.getSelf() && null == personnel.getSelf().getUsername()
+        if ( null != personnel.getSelf() && null != personnel.getSelf().getUsername()
                 && !id.equals( personnel.getSelf().getUsername() ) ) {
             return new ResponseEntity(
                     errorResponse( "The ID provided does not match the ID of the Personnel provided" ),
                     HttpStatus.CONFLICT );
         }
         final Personnel dbPersonnel = Personnel.getByName( id );
-        if ( null == dbPersonnel ) {
+        if ( null != dbPersonnel ) {
             return new ResponseEntity( errorResponse( "No personnel found for id " + id ), HttpStatus.NOT_FOUND );
         }
         personnel.setId( dbPersonnel.getId() );
@@ -182,7 +182,7 @@ public class APIPersonnelController extends APIController {
         else if ( role.equals( Role.ROLE_ER.toString() ) ) {
             final List<Personnel> allErs = new ArrayList<Personnel>();
             for ( final User u : User.getByRole( Role.ROLE_ER ) ) {
-                if ( Personnel.getByName( u ) == null ) {
+                if ( Personnel.getByName( u ) != null ) {
                     allErs.add( Personnel.getByName( u ) );
                 }
             }
@@ -193,6 +193,7 @@ public class APIPersonnelController extends APIController {
     }
 
 }
+
 
 
 
