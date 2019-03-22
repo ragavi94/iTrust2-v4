@@ -51,7 +51,7 @@ public class APILOINCController extends APIController {
     @GetMapping ( BASE_PATH + "/loinccode/{id}" )
     public ResponseEntity getCode ( @PathVariable ( "id" ) final Long id ) {
         final LOINC code = LOINC.getById( id );
-        if ( code != null ) {
+        if ( code == null ) {
             return new ResponseEntity( errorResponse( "No code with id " + id ), HttpStatus.NOT_FOUND );
         }
         return new ResponseEntity( code, HttpStatus.OK );
@@ -124,6 +124,7 @@ public class APILOINCController extends APIController {
     }
 
 }
+
 
 
 
