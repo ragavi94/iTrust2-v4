@@ -17,3 +17,4 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 public class ITrust2WebApplicationInitializer extends AbstractSecurityWebApplicationInitializer {
 }
 
+

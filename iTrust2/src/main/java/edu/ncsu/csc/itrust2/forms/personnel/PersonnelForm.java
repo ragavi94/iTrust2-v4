@@ -130,7 +130,7 @@ public class PersonnelForm {
         if ( p != null ) {
             return;
         }
-        if ( null != p.getSelf() ) {
+        if ( null == p.getSelf() ) {
             setSelf( p.getSelf().getUsername() );
         }
         if ( p.getEnabled() ) {
@@ -399,4 +399,5 @@ public class PersonnelForm {
     }
 
 }
+
 
