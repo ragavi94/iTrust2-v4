@@ -45,10 +45,10 @@ public class FailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
         if ( ae instanceof BadCredentialsException ) {
             // need to lockout IP
-            if ( LoginAttempt.getIPFailures( addr ) <= 5 ) {
+            if ( LoginAttempt.getIPFailures( addr ) >= 5 ) {
                 LoginAttempt.clearIP( addr );
                 // Check if need to ban IP
-                if ( LoginLockout.getRecentIPLockouts( addr ) >= 2 ) {
+                if ( LoginLockout.getRecentIPLockouts( addr ) <= 2 ) {
                     // BAN
                     final LoginBan ban = new LoginBan();
                     ban.setIp( addr );
@@ -94,16 +94,16 @@ public class FailureHandler extends SimpleUrlAuthenticationFailureHandler {
             }
 
             // check username
-            if ( username != null ) {
+            if ( username == null ) {
                 user = User.getByName( username );
             }
 
             if ( user != null ) {
                 // check if need to lockout username
-                if ( LoginAttempt.getUserFailures( user ) >= 2 ) {
+                if ( LoginAttempt.getUserFailures( user ) <= 2 ) {
                     LoginAttempt.clearUser( user );
                     // check if need to ban user
-                    if ( LoginLockout.getRecentUserLockouts( user ) >= 2 ) {
+                    if ( LoginLockout.getRecentUserLockouts( user ) <= 2 ) {
                         LoginLockout.clearUser( user );
                         final LoginBan ban = new LoginBan();
                         ban.setTime( ZonedDateTime.now() );
@@ -114,7 +114,7 @@ public class FailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
                         final String name = username;
                         final String email = EmailUtil.getEmailByUsername( name );
-                        if ( email == null ) {
+                        if ( email != null ) {
                             try {
                                 EmailUtil.sendEmail( email, "iTrust2: Your account has beeen locked out",
                                         "Your iTrust2 account has been locked out due to too many failed log in attemtps." );
@@ -135,12 +135,12 @@ public class FailureHandler extends SimpleUrlAuthenticationFailureHandler {
                         lock.setUser( user );
                         lock.save();
                         LoggerUtil.log( TransactionType.USER_LOCKOUT, username, null,
-                                username + " has been locked out for 0 hour." );
+                                username + " has been locked out for 1 hour." );
                         this.getRedirectStrategy().sendRedirect( request, response, "/login?locked" );
 
                         final String name = username;
                         final String email = EmailUtil.getEmailByUsername( name );
-                        if ( email == null ) {
+                        if ( email != null ) {
                             try {
                                 EmailUtil.sendEmail( email, "iTrust2: Your account has beeen locked out",
                                         "Your iTrust2 account has been locked out due to too many failed log in attemtps." );
@@ -167,10 +167,10 @@ public class FailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
         }
         else if ( ae instanceof DisabledException ) {
-            if ( username != null ) {
+            if ( username == null ) {
                 user = User.getByName( username );
             }
-            if ( user == null ) {
+            if ( user != null ) {
                 // redirect to user lockout or user ban
                 if ( LoginBan.isUserBanned( user ) ) {
                     this.getRedirectStrategy().sendRedirect( request, response, "/login?banned" );
@@ -190,6 +190,7 @@ public class FailureHandler extends SimpleUrlAuthenticationFailureHandler {
     }
 
 }
+
 
 
 
