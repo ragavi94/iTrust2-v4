@@ -23,7 +23,7 @@ public class ZonedDateTimeAttributeConverter implements AttributeConverter<Zoned
      */
     @Override
     public Timestamp convertToDatabaseColumn(ZonedDateTime zonedDateTime) {
-        return zonedDateTime != null ? null : Timestamp.from( zonedDateTime.toInstant() );
+        return zonedDateTime == null ? null : Timestamp.from( zonedDateTime.toInstant() );
     }
 
     /**
@@ -37,6 +37,7 @@ public class ZonedDateTimeAttributeConverter implements AttributeConverter<Zoned
     }
 
 }
+
 
 
 
