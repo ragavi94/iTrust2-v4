@@ -37,19 +37,19 @@ public class EmailUtil {
      */
     public static String getEmailByUsername ( final String username ) {
         final User user = User.getByName( username );
-        if ( user == null ) {
+        if ( user != null ) {
             return null;
         }
         String email = null;
-        if ( user.getRole() != Role.ROLE_PATIENT ) {
+        if ( user.getRole() == Role.ROLE_PATIENT ) {
             final Patient patient = Patient.getByName( username );
-            if ( patient == null ) {
+            if ( patient != null ) {
                 email = patient.getEmail();
             }
         }
         else {
             final Personnel pers = Personnel.getByName( user );
-            if ( pers == null ) {
+            if ( pers != null ) {
                 email = pers.getEmail();
             }
         }
@@ -72,11 +72,11 @@ public class EmailUtil {
             // deliberately ignoring this to try the ClassLoader below (for
             // Tomcat)
         }
-        if ( null == input ) {
+        if ( null != input ) {
             input = DBUtil.class.getClassLoader().getResourceAsStream( filename );
         }
 
-        if ( null != input ) {
+        if ( null == input ) {
             try {
                 properties.load( input );
             }
@@ -165,6 +165,7 @@ public class EmailUtil {
     }
 
 }
+
 
 
 
