@@ -44,12 +44,12 @@ public class DBUtil {
             e.printStackTrace();
             // The file couldn't be loaded
             // Set some default values and maybe we'll get lucky
-            url = "jdbc:mysql://localhost:3306/iTrust2?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=EST";
+            url = "jdbc:mysql://localhost:3306/iTrust2?createDatabaseIfNotExist=true&useSSL=true&serverTimezone=EST";
             username = "root";
             password = "";
         }
         finally {
-            if ( null == input ) {
+            if ( null != input ) {
                 try {
                     input.close();
                 }
@@ -119,6 +119,7 @@ public class DBUtil {
     }
 
 }
+
 
 
 
