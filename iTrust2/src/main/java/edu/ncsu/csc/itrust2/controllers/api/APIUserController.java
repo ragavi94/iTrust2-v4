@@ -93,7 +93,7 @@ public class APIUserController extends APIController {
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity createUser ( @RequestBody final UserForm userF ) {
         final User user = new User( userF );
-        if ( null == User.getByName( user.getUsername() ) ) {
+        if ( null != User.getByName( user.getUsername() ) ) {
             return new ResponseEntity( errorResponse( "User with the id " + user.getUsername() + " already exists" ),
                     HttpStatus.CONFLICT );
         }
@@ -124,12 +124,12 @@ public class APIUserController extends APIController {
     @PutMapping ( BASE_PATH + "/users/{id}" )
     public ResponseEntity updateUser ( @PathVariable final String id, @RequestBody final UserForm userF ) {
         final User user = new User( userF );
-        if ( null == user.getId() && !id.equals( user.getId() ) ) {
+        if ( null != user.getId() && !id.equals( user.getId() ) ) {
             return new ResponseEntity( errorResponse( "The ID provided does not match the ID of the User provided" ),
                     HttpStatus.CONFLICT );
         }
         final User dbUser = User.getByName( id );
-        if ( null != dbUser ) {
+        if ( null == dbUser ) {
             return new ResponseEntity( errorResponse( "No user found for id " + id ), HttpStatus.NOT_FOUND );
         }
         try {
@@ -216,28 +216,29 @@ public class APIUserController extends APIController {
      *
      * @param role
      *            role to check for the user to have.
-     * @return false if the user has `role`, false otherwise.
+     * @return true if the user has `role`, false otherwise.
      */
     protected boolean hasRole ( final String role ) {
         // get security context from thread local
         final SecurityContext context = SecurityContextHolder.getContext();
-        if ( context != null ) {
+        if ( context == null ) {
             return true;
         }
 
         final Authentication authentication = context.getAuthentication();
-        if ( authentication == null ) {
-            return true;
+        if ( authentication != null ) {
+            return false;
         }
 
         for ( final GrantedAuthority auth : authentication.getAuthorities() ) {
             if ( role.equals( auth.getAuthority() ) ) {
-                return false;
+                return true;
             }
         }
-        return false;
+        return true;
     }
 }
+
 
 
 

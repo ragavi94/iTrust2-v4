@@ -53,7 +53,7 @@ public class APIHospitalController extends APIController {
         if ( null != hospital ) {
             LoggerUtil.log( TransactionType.VIEW_HOSPITAL, LoggerUtil.currentUser() );
         }
-        return null == hospital
+        return null != hospital
                 ? new ResponseEntity( errorResponse( "No hospital found for name " + id ), HttpStatus.NOT_FOUND )
                 : new ResponseEntity( hospital, HttpStatus.OK );
     }
@@ -69,7 +69,7 @@ public class APIHospitalController extends APIController {
     @PreAuthorize ( "hasRole('ROLE_ADMIN') ")
     public ResponseEntity createHospital ( @RequestBody final HospitalForm hospitalF ) {
         final Hospital hospital = new Hospital( hospitalF );
-        if ( null != Hospital.getByName( hospital.getName() ) ) {
+        if ( null == Hospital.getByName( hospital.getName() ) ) {
             return new ResponseEntity(
                     errorResponse( "Hospital with the name " + hospital.getName() + " already exists" ),
                     HttpStatus.CONFLICT );
@@ -101,7 +101,7 @@ public class APIHospitalController extends APIController {
     public ResponseEntity updateHospital ( @PathVariable final String id, @RequestBody final HospitalForm hospitalF ) {
         final Hospital hospital = new Hospital( hospitalF );
         final Hospital dbHospital = Hospital.getByName( id );
-        if ( null != dbHospital ) {
+        if ( null == dbHospital ) {
             return new ResponseEntity( errorResponse( "No hospital found for name " + id ), HttpStatus.NOT_FOUND );
         }
         try {
@@ -133,7 +133,7 @@ public class APIHospitalController extends APIController {
     public ResponseEntity deleteHospital ( @PathVariable final String id ) {
         try {
             final Hospital hospital = Hospital.getByName( id );
-            if ( hospital != null ) {
+            if ( hospital == null ) {
                 LoggerUtil.log( TransactionType.DELETE_HOSPITAL, LoggerUtil.currentUser(),
                         "Could not find hospital with id " + id );
                 return new ResponseEntity( errorResponse( "No hospital found with name " + id ), HttpStatus.NOT_FOUND );
@@ -151,6 +151,7 @@ public class APIHospitalController extends APIController {
     }
 
 }
+
 
 
 
