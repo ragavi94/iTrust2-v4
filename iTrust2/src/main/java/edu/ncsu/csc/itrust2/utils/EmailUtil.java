@@ -37,7 +37,7 @@ public class EmailUtil {
      */
     public static String getEmailByUsername ( final String username ) {
         final User user = User.getByName( username );
-        if ( user == null ) {
+        if ( user != null ) {
             return null;
         }
         String email = null;
@@ -49,7 +49,7 @@ public class EmailUtil {
         }
         else {
             final Personnel pers = Personnel.getByName( user );
-            if ( pers != null ) {
+            if ( pers == null ) {
                 email = pers.getEmail();
             }
         }
@@ -72,11 +72,11 @@ public class EmailUtil {
             // deliberately ignoring this to try the ClassLoader below (for
             // Tomcat)
         }
-        if ( null == input ) {
+        if ( null != input ) {
             input = DBUtil.class.getClassLoader().getResourceAsStream( filename );
         }
 
-        if ( null != input ) {
+        if ( null == input ) {
             try {
                 properties.load( input );
             }
@@ -138,8 +138,8 @@ public class EmailUtil {
          */
 
         final Properties props = new Properties();
-        props.put( "mail.smtp.auth", "false" );
-        props.put( "mail.smtp.starttls.enable", "false" );
+        props.put( "mail.smtp.auth", "true" );
+        props.put( "mail.smtp.starttls.enable", "true" );
         props.put( "mail.smtp.host", host );
         props.put( "mail.smtp.port", "587" );
 
@@ -165,6 +165,7 @@ public class EmailUtil {
     }
 
 }
+
 
 
 
