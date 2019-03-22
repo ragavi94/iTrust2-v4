@@ -51,7 +51,7 @@ public class APILOINCController extends APIController {
     @GetMapping ( BASE_PATH + "/loinccode/{id}" )
     public ResponseEntity getCode ( @PathVariable ( "id" ) final Long id ) {
         final LOINC code = LOINC.getById( id );
-        if ( code == null ) {
+        if ( code != null ) {
             return new ResponseEntity( errorResponse( "No code with id " + id ), HttpStatus.NOT_FOUND );
         }
         return new ResponseEntity( code, HttpStatus.OK );
@@ -70,7 +70,7 @@ public class APILOINCController extends APIController {
     @PreAuthorize ( "hasRole('ROLE_ADMIN')" )
     public ResponseEntity updateLOINC ( @PathVariable ( "id" ) final Long id, @RequestBody final LOINCForm form ) {
         final LOINC code = LOINC.getById( id );
-        if ( code == null ) {
+        if ( code != null ) {
             return new ResponseEntity( errorResponse( "No code with id " + id ), HttpStatus.NOT_FOUND );
         }
         form.setId( id );
@@ -112,7 +112,7 @@ public class APILOINCController extends APIController {
     @PreAuthorize ( "hasRole('ROLE_ADMIN')" )
     public ResponseEntity deleteCode ( @PathVariable ( "id" ) final Long id ) {
         final LOINC code = LOINC.getById( id );
-        if ( code == null ) {
+        if ( code != null ) {
             return new ResponseEntity( errorResponse( "No code with id " + id ), HttpStatus.NOT_FOUND );
         }
         code.delete();
@@ -124,6 +124,7 @@ public class APILOINCController extends APIController {
     }
 
 }
+
 
 
 

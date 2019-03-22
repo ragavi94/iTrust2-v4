@@ -43,7 +43,7 @@ public class APIDrugController extends APIController {
             final Drug drug = new Drug( form );
 
             // Make sure code does not conflict with existing drugs
-            if ( Drug.getByCode( drug.getCode() ) != null ) {
+            if ( Drug.getByCode( drug.getCode() ) == null ) {
                 LoggerUtil.log( TransactionType.DRUG_CREATE, LoggerUtil.currentUser(),
                         "Conflict: drug with code " + drug.getCode() + " already exists" );
                 return new ResponseEntity( errorResponse( "Drug with code " + drug.getCode() + " already exists" ),
@@ -117,7 +117,7 @@ public class APIDrugController extends APIController {
     public ResponseEntity deleteDrug ( @PathVariable final String id ) {
         try {
             final Drug drug = Drug.getById( Long.parseLong( id ) );
-            if ( drug != null ) {
+            if ( drug == null ) {
                 LoggerUtil.log( TransactionType.DRUG_DELETE, LoggerUtil.currentUser(),
                         "Could not find drug with id " + id );
                 return new ResponseEntity( errorResponse( "No drug found with id " + id ), HttpStatus.NOT_FOUND );
@@ -146,6 +146,7 @@ public class APIDrugController extends APIController {
     }
 
 }
+
 
 
 

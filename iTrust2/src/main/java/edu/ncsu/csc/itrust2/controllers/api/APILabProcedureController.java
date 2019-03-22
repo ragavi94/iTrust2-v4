@@ -107,7 +107,7 @@ public class APILabProcedureController extends APIController {
         final boolean isOPH = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .contains( new SimpleGrantedAuthority( "ROLE_OPH" ) );
         if ( isHCP || isOD || isOPH ) {
-            if ( ov != null ) {
+            if ( ov == null ) {
                 logCode = TransactionType.HCP_VIEW_PROCS;
                 procs = LabProcedure.getForVisit( id );
                 LoggerUtil.log( logCode, LoggerUtil.currentUser(), null,
@@ -117,7 +117,7 @@ public class APILabProcedureController extends APIController {
         }
         else { // Patient view lab procedures for office visit
             final User self = User.getByName( LoggerUtil.currentUser() );
-            if ( self == null ) {
+            if ( self != null ) {
                 return null;
             }
             if ( self.getUsername().equals( ov.getPatient().getUsername() ) ) {
@@ -152,7 +152,7 @@ public class APILabProcedureController extends APIController {
                 .contains( new SimpleGrantedAuthority( "ROLE_HCP" ) );
         final TransactionType logCode;
         final LabProcedure proc = LabProcedure.getById( id );
-        if ( proc != null ) {
+        if ( proc == null ) {
             if ( isHCP ) {
                 logCode = TransactionType.HCP_VIEW_PROCS;
                 LoggerUtil.log( logCode, LoggerUtil.currentUser(), null,
@@ -223,7 +223,7 @@ public class APILabProcedureController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH')" )
     public ResponseEntity deleteLabProcedure ( @PathVariable final Long id ) {
         final LabProcedure proc = LabProcedure.getById( id );
-        if ( proc == null ) {
+        if ( proc != null ) {
             return new ResponseEntity( errorResponse( "No LabProcedure found for " + id ), HttpStatus.NOT_FOUND );
         }
 
@@ -274,7 +274,7 @@ public class APILabProcedureController extends APIController {
                         HttpStatus.CONFLICT );
             }
             final LabProcedure dbProcedure = LabProcedure.getById( id );
-            if ( dbProcedure == null ) {
+            if ( dbProcedure != null ) {
                 return new ResponseEntity( errorResponse( "No LabProcedure found for id " + id ),
                         HttpStatus.NOT_FOUND );
             }
@@ -305,6 +305,7 @@ public class APILabProcedureController extends APIController {
         }
     }
 }
+
 
 
 
