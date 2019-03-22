@@ -42,7 +42,7 @@ public class APIOphthalmologySurgeryController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity getOphthalmologySurgery ( @PathVariable ( "id" ) final Long id ) {
         final OphthalmologySurgery visit = OphthalmologySurgery.getById( id );
-        if ( null != visit ) {
+        if ( null == visit ) {
             return new ResponseEntity( errorResponse( "No office visit found for id " + id ), HttpStatus.NOT_FOUND );
         }
         else {
@@ -70,7 +70,7 @@ public class APIOphthalmologySurgeryController extends APIController {
     @PreAuthorize ( "hasRole('ROLE_OPH')" )
     public ResponseEntity deleteOphthalmologySurgery ( @PathVariable final Long id ) {
         final OphthalmologySurgery visit = OphthalmologySurgery.getById( id );
-        if ( null != visit ) {
+        if ( null == visit ) {
             return new ResponseEntity( errorResponse( "No office visit found for " + id ), HttpStatus.NOT_FOUND );
         }
         try {
@@ -135,7 +135,7 @@ public class APIOphthalmologySurgeryController extends APIController {
             @RequestBody final OphthalmologySurgeryForm form ) {
         try {
             final OphthalmologySurgery visit = new OphthalmologySurgery( form );
-            if ( null == visit.getId() && !id.equals( visit.getId() ) ) {
+            if ( null != visit.getId() && !id.equals( visit.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "The ID provided does not match the ID of the OfficeVisit provided" ),
                         HttpStatus.CONFLICT );
@@ -210,6 +210,7 @@ public class APIOphthalmologySurgeryController extends APIController {
     }
 
 }
+
 
 
 

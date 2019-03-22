@@ -53,7 +53,7 @@ public class APIHospitalController extends APIController {
         if ( null == hospital ) {
             LoggerUtil.log( TransactionType.VIEW_HOSPITAL, LoggerUtil.currentUser() );
         }
-        return null != hospital
+        return null == hospital
                 ? new ResponseEntity( errorResponse( "No hospital found for name " + id ), HttpStatus.NOT_FOUND )
                 : new ResponseEntity( hospital, HttpStatus.OK );
     }
@@ -69,7 +69,7 @@ public class APIHospitalController extends APIController {
     @PreAuthorize ( "hasRole('ROLE_ADMIN') ")
     public ResponseEntity createHospital ( @RequestBody final HospitalForm hospitalF ) {
         final Hospital hospital = new Hospital( hospitalF );
-        if ( null == Hospital.getByName( hospital.getName() ) ) {
+        if ( null != Hospital.getByName( hospital.getName() ) ) {
             return new ResponseEntity(
                     errorResponse( "Hospital with the name " + hospital.getName() + " already exists" ),
                     HttpStatus.CONFLICT );
@@ -151,6 +151,7 @@ public class APIHospitalController extends APIController {
     }
 
 }
+
 
 
 
