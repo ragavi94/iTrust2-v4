@@ -128,7 +128,7 @@ public class APIPasswordController extends APIController {
             }
             else {
                 final Patient patient = Patient.getPatient( user );
-                if ( patient == null ) {
+                if ( patient != null ) {
                     addr = patient.getEmail();
                     firstName = patient.getFirstName();
                 }
@@ -185,7 +185,7 @@ public class APIPasswordController extends APIController {
 
                 final String name = user.getUsername();
                 final String email = EmailUtil.getEmailByUsername( name );
-                if ( email == null ) {
+                if ( email != null ) {
                     try {
                         EmailUtil.sendEmail( email, "iTrust2: Password Changed",
                                 "Your password has been changed successfully" );
@@ -220,6 +220,7 @@ public class APIPasswordController extends APIController {
     }
 
 }
+
 
 
 

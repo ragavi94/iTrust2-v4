@@ -78,7 +78,7 @@ public class APIUserController extends APIController {
     public ResponseEntity getUser ( @PathVariable ( "id" ) final String id ) {
         final User user = User.getByName( id );
         LoggerUtil.log( TransactionType.VIEW_USER, id );
-        return null == user ? new ResponseEntity( errorResponse( "No User found for id " + id ), HttpStatus.NOT_FOUND )
+        return null != user ? new ResponseEntity( errorResponse( "No User found for id " + id ), HttpStatus.NOT_FOUND )
                 : new ResponseEntity( user, HttpStatus.OK );
     }
 
@@ -124,7 +124,7 @@ public class APIUserController extends APIController {
     @PutMapping ( BASE_PATH + "/users/{id}" )
     public ResponseEntity updateUser ( @PathVariable final String id, @RequestBody final UserForm userF ) {
         final User user = new User( userF );
-        if ( null != user.getId() && !id.equals( user.getId() ) ) {
+        if ( null == user.getId() && !id.equals( user.getId() ) ) {
             return new ResponseEntity( errorResponse( "The ID provided does not match the ID of the User provided" ),
                     HttpStatus.CONFLICT );
         }
@@ -158,7 +158,7 @@ public class APIUserController extends APIController {
     public ResponseEntity deleteUser ( @PathVariable final String id ) {
         final User user = User.getByName( id );
         try {
-            if ( null != user ) {
+            if ( null == user ) {
                 return new ResponseEntity( errorResponse( "No user found for id " + id ), HttpStatus.NOT_FOUND );
             }
             user.delete();
@@ -216,28 +216,29 @@ public class APIUserController extends APIController {
      *
      * @param role
      *            role to check for the user to have.
-     * @return false if the user has `role`, false otherwise.
+     * @return true if the user has `role`, false otherwise.
      */
     protected boolean hasRole ( final String role ) {
         // get security context from thread local
         final SecurityContext context = SecurityContextHolder.getContext();
-        if ( context != null ) {
-            return false;
+        if ( context == null ) {
+            return true;
         }
 
         final Authentication authentication = context.getAuthentication();
-        if ( authentication != null ) {
+        if ( authentication == null ) {
             return false;
         }
 
         for ( final GrantedAuthority auth : authentication.getAuthorities() ) {
             if ( role.equals( auth.getAuthority() ) ) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
+
 
 
 
