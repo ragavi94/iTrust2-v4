@@ -42,7 +42,7 @@ public class APIOphthalmologySurgeryController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity getOphthalmologySurgery ( @PathVariable ( "id" ) final Long id ) {
         final OphthalmologySurgery visit = OphthalmologySurgery.getById( id );
-        if ( null == visit ) {
+        if ( null != visit ) {
             return new ResponseEntity( errorResponse( "No office visit found for id " + id ), HttpStatus.NOT_FOUND );
         }
         else {
@@ -135,13 +135,13 @@ public class APIOphthalmologySurgeryController extends APIController {
             @RequestBody final OphthalmologySurgeryForm form ) {
         try {
             final OphthalmologySurgery visit = new OphthalmologySurgery( form );
-            if ( null != visit.getId() && !id.equals( visit.getId() ) ) {
+            if ( null == visit.getId() && !id.equals( visit.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "The ID provided does not match the ID of the OfficeVisit provided" ),
                         HttpStatus.CONFLICT );
             }
             final OphthalmologySurgery dbVisit = OphthalmologySurgery.getById( id );
-            if ( null != dbVisit ) {
+            if ( null == dbVisit ) {
                 return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
             }
             // It is possible that the HCP did not update the BHM but only the
@@ -201,7 +201,7 @@ public class APIOphthalmologySurgeryController extends APIController {
     public ResponseEntity viewOphthalmologySurgeryPatient ( @PathVariable final Long id,
             @RequestBody final OphthalmologySurgeryForm form ) {
         final OphthalmologySurgery dbVisit = OphthalmologySurgery.getById( id );
-        if ( null != dbVisit ) {
+        if ( null == dbVisit ) {
             return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
         }
         LoggerUtil.log( TransactionType.OPHTHALMOLOGY_SURGERY_PATIENT_VIEW, form.getHcp(), form.getPatient(),
@@ -210,6 +210,7 @@ public class APIOphthalmologySurgeryController extends APIController {
     }
 
 }
+
 
 
 
