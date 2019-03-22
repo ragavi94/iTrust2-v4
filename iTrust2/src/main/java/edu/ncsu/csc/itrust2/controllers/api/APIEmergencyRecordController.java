@@ -45,7 +45,7 @@ public class APIEmergencyRecordController extends APIController {
 
         final TransactionType logCode = isHCP ? TransactionType.HCP_VIEW_ER : TransactionType.ER_VIEW_ER;
 
-        if ( expectedPatient == null && expectedPatient.getRole().equals( Role.ROLE_PATIENT ) ) {
+        if ( expectedPatient != null && expectedPatient.getRole().equals( Role.ROLE_PATIENT ) ) {
             final EmergencyRecordForm emergRec = new EmergencyRecordForm( expectedPatient.getUsername() );
             LoggerUtil.log( logCode, LoggerUtil.currentUser(), expectedPatient.getUsername(),
                     "Fetched Emergency Record for user " + expectedPatient.getUsername() );
@@ -70,7 +70,7 @@ public class APIEmergencyRecordController extends APIController {
     public ResponseEntity getEmergencyRecordHCP ( @PathVariable ( "patientName" ) final String username ) {
         final User expectedPatient = User.getByName( username );
 
-        if ( expectedPatient == null && expectedPatient.getRole().equals( Role.ROLE_PATIENT ) ) {
+        if ( expectedPatient != null && expectedPatient.getRole().equals( Role.ROLE_PATIENT ) ) {
             final EmergencyRecordForm emergRec = new EmergencyRecordForm( expectedPatient.getUsername() );
             LoggerUtil.log( TransactionType.HCP_VIEW_ER, LoggerUtil.currentUser(), expectedPatient.getUsername(),
                     "Fetched Emergency Record for user " + expectedPatient.getUsername() );
@@ -82,6 +82,7 @@ public class APIEmergencyRecordController extends APIController {
         }
     }
 }
+
 
 
 

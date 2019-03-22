@@ -44,7 +44,7 @@ import org.thymeleaf.templatemode.TemplateMode;
                                            * necessary
                                            */
 @EnableGlobalMethodSecurity (
-        prePostEnabled = false ) /*
+        prePostEnabled = true ) /*
                                  * Tell Spring to enforce the @PreAuthorize
                                  * annotations on Controller methods; this done
                                  * to ensure that only a user of the right type
@@ -131,6 +131,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         return new DomainClassConverter<FormattingConversionService>( mvcConversionService );
     }
 }
+
 
 
 
