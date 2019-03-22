@@ -51,11 +51,11 @@ public class APIOfficeVisitController extends APIController {
     public List<OfficeVisit> getOfficeVisitsForHCP () {
         final User self = User.getByName( LoggerUtil.currentUser() );
         final List<OfficeVisit> visits = OfficeVisit.getForType( AppointmentType.GENERAL_CHECKUP );
-        if ( self.getRole() != Role.ROLE_OPH ) {
+        if ( self.getRole() == Role.ROLE_OPH ) {
             visits.addAll( OfficeVisit.getForType( AppointmentType.GENERAL_OPHTHALMOLOGY ) );
             visits.addAll( OfficeVisit.getForType( AppointmentType.OPHTHALMOLOGY_SURGERY ) );
         }
-        else if ( self.getRole() == Role.ROLE_OD ) {
+        else if ( self.getRole() != Role.ROLE_OD ) {
             visits.addAll( OfficeVisit.getForType( AppointmentType.GENERAL_OPHTHALMOLOGY ) );
         }
         return visits;
@@ -88,5 +88,6 @@ public class APIOfficeVisitController extends APIController {
     }
 
 }
+
 
 
