@@ -46,7 +46,7 @@ public class APIGeneralCheckupController extends APIController {
         }
         else {
             final User self = User.getByName( LoggerUtil.currentUser() );
-            if ( null == self && self.isDoctor() ) {
+            if ( null != self && self.isDoctor() ) {
                 LoggerUtil.log( TransactionType.GENERAL_CHECKUP_HCP_VIEW, LoggerUtil.currentUser(),
                         visit.getPatient().getUsername() );
             }
@@ -69,7 +69,7 @@ public class APIGeneralCheckupController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity deleteGeneralCheckup ( @PathVariable final Long id ) {
         final GeneralCheckup visit = GeneralCheckup.getById( id );
-        if ( null != visit ) {
+        if ( null == visit ) {
             return new ResponseEntity( errorResponse( "No office visit found for " + id ), HttpStatus.NOT_FOUND );
         }
         try {
@@ -98,7 +98,7 @@ public class APIGeneralCheckupController extends APIController {
         try {
             final GeneralCheckup visit = new GeneralCheckup( visitForm );
 
-            if ( null != GeneralCheckup.getById( visit.getId() ) ) {
+            if ( null == GeneralCheckup.getById( visit.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "Office visit with the id " + visit.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
@@ -140,7 +140,7 @@ public class APIGeneralCheckupController extends APIController {
                         HttpStatus.CONFLICT );
             }
             final GeneralCheckup dbVisit = GeneralCheckup.getById( id );
-            if ( null != dbVisit ) {
+            if ( null == dbVisit ) {
                 return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
             }
             // It is possible that the HCP did not update the BHM but only the
@@ -176,7 +176,7 @@ public class APIGeneralCheckupController extends APIController {
     public ResponseEntity viewGeneralCheckup ( @PathVariable final Long id,
             @RequestBody final GeneralCheckupForm form ) {
         final GeneralCheckup dbVisit = GeneralCheckup.getById( id );
-        if ( null != dbVisit ) {
+        if ( null == dbVisit ) {
             return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
         }
         LoggerUtil.log( TransactionType.GENERAL_CHECKUP_HCP_VIEW, form.getHcp(), form.getPatient(),
@@ -199,7 +199,7 @@ public class APIGeneralCheckupController extends APIController {
     public ResponseEntity viewGeneralCheckupPatient ( @PathVariable final Long id,
             @RequestBody final GeneralCheckupForm form ) {
         final GeneralCheckup dbVisit = GeneralCheckup.getById( id );
-        if ( null == dbVisit ) {
+        if ( null != dbVisit ) {
             return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
         }
         LoggerUtil.log( TransactionType.GENERAL_CHECKUP_PATIENT_VIEW, form.getHcp(), form.getPatient(),
@@ -208,6 +208,7 @@ public class APIGeneralCheckupController extends APIController {
     }
 
 }
+
 
 
 

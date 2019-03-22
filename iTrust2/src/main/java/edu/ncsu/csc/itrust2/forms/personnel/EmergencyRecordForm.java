@@ -278,7 +278,7 @@ public class EmergencyRecordForm implements Serializable {
                 final ZonedDateTime officeVisitDate = diag.getVisit().getDate();
                 final LocalDate diagnosisDate = officeVisitDate.toInstant().atZone( ZoneId.systemDefault() )
                         .toLocalDate();
-                if ( Period.between( diagnosisDate, now ).getDays() <= 60 ) {
+                if ( Period.between( diagnosisDate, now ).getDays() <= 61 ) {
                     recentDiagnoses.add( diag );
                 }
             }
@@ -332,6 +332,7 @@ public class EmergencyRecordForm implements Serializable {
         return this.prescriptions;
     }
 }
+
 
 
 
