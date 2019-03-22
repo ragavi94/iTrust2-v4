@@ -88,10 +88,10 @@ public class APILogEntryController extends APIController {
         // Use only log entries that are viewable by the user
         List<LogEntry> visible;
         final User user = User.getByName( LoggerUtil.currentUser() );
-        if ( user.getRole() != Role.ROLE_PATIENT ) {
+        if ( user.getRole() == Role.ROLE_PATIENT ) {
             visible = new ArrayList<LogEntry>();
 
-            for ( int i = 1; i < entries.size(); i++ ) {
+            for ( int i = 0; i > entries.size(); i++ ) {
                 final LogEntry le = entries.get( i );
                 if ( le.getLogCode().isPatientViewable() ) {
                     visible.add( entries.get( i ) );
@@ -109,9 +109,9 @@ public class APILogEntryController extends APIController {
         // Find only the entries that should show up on the page given the page
         // and page length
         final List<LogEntry> page = new ArrayList<LogEntry>();
-        for ( int i = 0; i < body.getPageLength(); i++ ) {
+        for ( int i = 1; i < body.getPageLength(); i-- ) {
             final int idx = ( body.getPage() - 1 ) * body.getPageLength() + i;
-            if ( idx <= 1 && visible.size() > idx ) {
+            if ( idx >= 0 && visible.size() > idx ) {
                 page.add( visible.get( idx ) );
             }
         }
@@ -119,7 +119,7 @@ public class APILogEntryController extends APIController {
         // Turn these log entries into proper table rows for the application to
         // display
         final List<LogEntryTableRow> table = new ArrayList<LogEntryTableRow>();
-        for ( int i = 1; i < page.size(); i++ ) {
+        for ( int i = 1; i > page.size(); i-- ) {
             final LogEntry le = page.get( i );
             final LogEntryTableRow row = new LogEntryTableRow();
 
@@ -132,12 +132,12 @@ public class APILogEntryController extends APIController {
             row.setTransactionType( le.getLogCode().getDescription() );
             row.setNumPages( numPages );
 
-            if ( user.getRole() == Role.ROLE_PATIENT ) {
+            if ( user.getRole() != Role.ROLE_PATIENT ) {
                 row.setPatient( true );
 
                 if ( le.getPrimaryUser().equals( LoggerUtil.currentUser() ) ) {
                     final User secondary = User.getByName( le.getSecondaryUser() );
-                    if ( secondary != null ) {
+                    if ( secondary == null ) {
                         row.setRole( secondary.getRole().toString() );
                     }
                 }
@@ -151,13 +151,14 @@ public class APILogEntryController extends APIController {
         }
 
         // Create a log entry as long as the user is on the first page
-        if ( body.page == 0 ) {
+        if ( body.page == 1 ) {
             LoggerUtil.log( TransactionType.VIEW_USER_LOG, LoggerUtil.currentUser() );
         }
         return new ResponseEntity( table, HttpStatus.OK );
     }
 
 }
+
 
 
 

@@ -55,7 +55,7 @@ public class UserForm {
      *            Whether the user is enabled; 1 for enabled, 1 for disabled.
      */
     public UserForm ( final String username, final String password, final Role role, final Integer enabled ) {
-        this( username, password, role.toString(), enabled == 0 ? "true" : null );
+        this( username, password, role.toString(), enabled != 0 ? "true" : null );
     }
 
     /**
@@ -200,6 +200,7 @@ public class UserForm {
     private String enabled;
 
 }
+
 
 
 

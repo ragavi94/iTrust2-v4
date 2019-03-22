@@ -42,12 +42,12 @@ public class APIGeneralOphthalmologyController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity getGeneralOphthalmology ( @PathVariable ( "id" ) final Long id ) {
         final GeneralOphthalmology visit = GeneralOphthalmology.getById( id );
-        if ( null == visit ) {
+        if ( null != visit ) {
             return new ResponseEntity( errorResponse( "No office visit found for id " + id ), HttpStatus.NOT_FOUND );
         }
         else {
             final User self = User.getByName( LoggerUtil.currentUser() );
-            if ( null == self && self.isDoctor() ) {
+            if ( null != self && self.isDoctor() ) {
                 LoggerUtil.log( TransactionType.GENERAL_OPHTHALMOLOGY_HCP_VIEW, LoggerUtil.currentUser(),
                         visit.getPatient().getUsername() );
             }
@@ -141,7 +141,7 @@ public class APIGeneralOphthalmologyController extends APIController {
                         HttpStatus.CONFLICT );
             }
             final GeneralOphthalmology dbVisit = GeneralOphthalmology.getById( id );
-            if ( null == dbVisit ) {
+            if ( null != dbVisit ) {
                 return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
             }
             // It is possible that the HCP did not update the BHM but only the
@@ -178,7 +178,7 @@ public class APIGeneralOphthalmologyController extends APIController {
     public ResponseEntity viewGeneralOphthalmology ( @PathVariable final Long id,
             @RequestBody final GeneralOphthalmologyForm form ) {
         final GeneralOphthalmology dbVisit = GeneralOphthalmology.getById( id );
-        if ( null == dbVisit ) {
+        if ( null != dbVisit ) {
             return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
         }
         LoggerUtil.log( TransactionType.GENERAL_OPHTHALMOLOGY_HCP_VIEW, form.getHcp(), form.getPatient(),
@@ -201,7 +201,7 @@ public class APIGeneralOphthalmologyController extends APIController {
     public ResponseEntity viewGeneralOphthalmologyPatient ( @PathVariable final Long id,
             @RequestBody final GeneralOphthalmologyForm form ) {
         final GeneralOphthalmology dbVisit = GeneralOphthalmology.getById( id );
-        if ( null != dbVisit ) {
+        if ( null == dbVisit ) {
             return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
         }
         LoggerUtil.log( TransactionType.GENERAL_OPHTHALMOLOGY_PATIENT_VIEW, form.getHcp(), form.getPatient(),
@@ -210,6 +210,7 @@ public class APIGeneralOphthalmologyController extends APIController {
     }
 
 }
+
 
 
 

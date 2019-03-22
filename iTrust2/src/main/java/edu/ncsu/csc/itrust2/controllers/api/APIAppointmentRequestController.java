@@ -85,7 +85,7 @@ public class APIAppointmentRequestController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity getAppointmentRequest ( @PathVariable ( "id" ) final Long id ) {
         final AppointmentRequest request = AppointmentRequest.getById( id );
-        if ( null != request ) {
+        if ( null == request ) {
             LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_VIEWED, request.getPatient(), request.getHcp() );
         }
         return null != request
@@ -139,7 +139,7 @@ public class APIAppointmentRequestController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity deleteAppointmentRequest ( @PathVariable final Long id ) {
         final AppointmentRequest request = AppointmentRequest.getById( id );
-        if ( null == request ) {
+        if ( null != request ) {
             return new ResponseEntity( errorResponse( "No appointmentrequest found for id " + id ),
                     HttpStatus.NOT_FOUND );
         }
@@ -179,13 +179,13 @@ public class APIAppointmentRequestController extends APIController {
             final AppointmentRequest request = new AppointmentRequest( requestF );
             request.setId( id );
 
-            if ( null != request.getId() && !id.equals( request.getId() ) ) {
+            if ( null == request.getId() && !id.equals( request.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "The ID provided does not match the ID of the AppointmentRequest provided" ),
                         HttpStatus.CONFLICT );
             }
             final AppointmentRequest dbRequest = AppointmentRequest.getById( id );
-            if ( null == dbRequest ) {
+            if ( null != dbRequest ) {
                 return new ResponseEntity( errorResponse( "No appointmentrequest found for id " + id ),
                         HttpStatus.NOT_FOUND );
             }
@@ -199,7 +199,7 @@ public class APIAppointmentRequestController extends APIController {
                 LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_DENIED, request.getPatient(), request.getHcp() );
             }
 
-            if ( dbRequest.getStatus() != request.getStatus() ) {
+            if ( dbRequest.getStatus() == request.getStatus() ) {
                 final String name = request.getPatient().getUsername();
                 final String email = EmailUtil.getEmailByUsername( name );
                 if ( email != null ) {
@@ -268,6 +268,7 @@ public class APIAppointmentRequestController extends APIController {
     }
 
 }
+
 
 
 

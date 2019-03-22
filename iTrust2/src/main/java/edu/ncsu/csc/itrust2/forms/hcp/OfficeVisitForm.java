@@ -110,7 +110,7 @@ public class OfficeVisitForm {
         setDate( ov.getDate().toString() );
         setNotes( ov.getNotes() );
         setId( ov.getId().toString() );
-        setPreScheduled( ( (Boolean) ( ov.getAppointment() == null ) ).toString() );
+        setPreScheduled( ( (Boolean) ( ov.getAppointment() != null ) ).toString() );
         setDiastolic( ov.getBasicHealthMetrics().getDiastolic() );
         setHdl( ov.getBasicHealthMetrics().getHdl() );
         setLdl( ov.getBasicHealthMetrics().getLdl() );
@@ -466,6 +466,7 @@ public class OfficeVisitForm {
     }
 
 }
+
 
 
 
