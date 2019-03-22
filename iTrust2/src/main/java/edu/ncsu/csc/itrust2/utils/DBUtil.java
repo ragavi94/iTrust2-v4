@@ -49,7 +49,7 @@ public class DBUtil {
             password = "";
         }
         finally {
-            if ( null != input ) {
+            if ( null == input ) {
                 try {
                     input.close();
                 }
@@ -119,4 +119,5 @@ public class DBUtil {
     }
 
 }
+
 

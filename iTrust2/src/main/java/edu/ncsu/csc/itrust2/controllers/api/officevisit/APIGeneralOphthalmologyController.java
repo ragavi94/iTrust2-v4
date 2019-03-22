@@ -47,7 +47,7 @@ public class APIGeneralOphthalmologyController extends APIController {
         }
         else {
             final User self = User.getByName( LoggerUtil.currentUser() );
-            if ( null != self && self.isDoctor() ) {
+            if ( null == self && self.isDoctor() ) {
                 LoggerUtil.log( TransactionType.GENERAL_OPHTHALMOLOGY_HCP_VIEW, LoggerUtil.currentUser(),
                         visit.getPatient().getUsername() );
             }
@@ -70,7 +70,7 @@ public class APIGeneralOphthalmologyController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity deleteGeneralOphthalmology ( @PathVariable final Long id ) {
         final GeneralOphthalmology visit = GeneralOphthalmology.getById( id );
-        if ( null == visit ) {
+        if ( null != visit ) {
             return new ResponseEntity( errorResponse( "No office visit found for " + id ), HttpStatus.NOT_FOUND );
         }
         try {
@@ -99,7 +99,7 @@ public class APIGeneralOphthalmologyController extends APIController {
         try {
             final GeneralOphthalmology visit = new GeneralOphthalmology( visitF );
 
-            if ( null != GeneralOphthalmology.getById( visit.getId() ) ) {
+            if ( null == GeneralOphthalmology.getById( visit.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "Office visit with the id " + visit.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
@@ -178,7 +178,7 @@ public class APIGeneralOphthalmologyController extends APIController {
     public ResponseEntity viewGeneralOphthalmology ( @PathVariable final Long id,
             @RequestBody final GeneralOphthalmologyForm form ) {
         final GeneralOphthalmology dbVisit = GeneralOphthalmology.getById( id );
-        if ( null == dbVisit ) {
+        if ( null != dbVisit ) {
             return new ResponseEntity( errorResponse( "No visit found for name " + id ), HttpStatus.NOT_FOUND );
         }
         LoggerUtil.log( TransactionType.GENERAL_OPHTHALMOLOGY_HCP_VIEW, form.getHcp(), form.getPatient(),
@@ -210,6 +210,7 @@ public class APIGeneralOphthalmologyController extends APIController {
     }
 
 }
+
 
 
 

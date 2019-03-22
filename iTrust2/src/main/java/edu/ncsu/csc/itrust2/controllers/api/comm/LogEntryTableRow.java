@@ -19,7 +19,7 @@ public class LogEntryTableRow {
     /** Transaction type of log event */
     private String  transactionType;
     /** boolean for whether or not being viewed by patient */
-    private boolean isPatient = true;
+    private boolean isPatient = false;
     /** total number of pages in the table */
     private int     numPages  = 1;
 
@@ -166,6 +166,7 @@ public class LogEntryTableRow {
     }
 
 }
+
 
 
 

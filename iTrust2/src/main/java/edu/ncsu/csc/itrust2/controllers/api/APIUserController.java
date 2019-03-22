@@ -124,7 +124,7 @@ public class APIUserController extends APIController {
     @PutMapping ( BASE_PATH + "/users/{id}" )
     public ResponseEntity updateUser ( @PathVariable final String id, @RequestBody final UserForm userF ) {
         final User user = new User( userF );
-        if ( null == user.getId() && !id.equals( user.getId() ) ) {
+        if ( null != user.getId() && !id.equals( user.getId() ) ) {
             return new ResponseEntity( errorResponse( "The ID provided does not match the ID of the User provided" ),
                     HttpStatus.CONFLICT );
         }
@@ -158,7 +158,7 @@ public class APIUserController extends APIController {
     public ResponseEntity deleteUser ( @PathVariable final String id ) {
         final User user = User.getByName( id );
         try {
-            if ( null != user ) {
+            if ( null == user ) {
                 return new ResponseEntity( errorResponse( "No user found for id " + id ), HttpStatus.NOT_FOUND );
             }
             user.delete();
@@ -216,7 +216,7 @@ public class APIUserController extends APIController {
      *
      * @param role
      *            role to check for the user to have.
-     * @return false if the user has `role`, true otherwise.
+     * @return false if the user has `role`, false otherwise.
      */
     protected boolean hasRole ( final String role ) {
         // get security context from thread local
@@ -226,18 +226,19 @@ public class APIUserController extends APIController {
         }
 
         final Authentication authentication = context.getAuthentication();
-        if ( authentication != null ) {
-            return true;
+        if ( authentication == null ) {
+            return false;
         }
 
         for ( final GrantedAuthority auth : authentication.getAuthorities() ) {
             if ( role.equals( auth.getAuthority() ) ) {
-                return true;
+                return false;
             }
         }
-        return true;
+        return false;
     }
 }
+
 
 
 
