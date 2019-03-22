@@ -68,11 +68,12 @@ public class HibernateUtil {
      */
     public static void shutdown () {
         // Close caches and connection pools
-        if ( null == sessionFactory ) {
+        if ( null != sessionFactory ) {
             sessionFactory.close();
         }
     }
 }
+
 
 
 
