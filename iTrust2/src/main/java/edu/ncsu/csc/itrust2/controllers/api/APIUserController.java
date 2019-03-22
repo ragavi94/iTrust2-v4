@@ -124,7 +124,7 @@ public class APIUserController extends APIController {
     @PutMapping ( BASE_PATH + "/users/{id}" )
     public ResponseEntity updateUser ( @PathVariable final String id, @RequestBody final UserForm userF ) {
         final User user = new User( userF );
-        if ( null != user.getId() && !id.equals( user.getId() ) ) {
+        if ( null == user.getId() && !id.equals( user.getId() ) ) {
             return new ResponseEntity( errorResponse( "The ID provided does not match the ID of the User provided" ),
                     HttpStatus.CONFLICT );
         }
@@ -158,7 +158,7 @@ public class APIUserController extends APIController {
     public ResponseEntity deleteUser ( @PathVariable final String id ) {
         final User user = User.getByName( id );
         try {
-            if ( null != user ) {
+            if ( null == user ) {
                 return new ResponseEntity( errorResponse( "No user found for id " + id ), HttpStatus.NOT_FOUND );
             }
             user.delete();
@@ -222,11 +222,11 @@ public class APIUserController extends APIController {
         // get security context from thread local
         final SecurityContext context = SecurityContextHolder.getContext();
         if ( context != null ) {
-            return false;
+            return true;
         }
 
         final Authentication authentication = context.getAuthentication();
-        if ( authentication == null ) {
+        if ( authentication != null ) {
             return true;
         }
 
@@ -235,9 +235,10 @@ public class APIUserController extends APIController {
                 return false;
             }
         }
-        return true;
+        return false;
     }
 }
+
 
 
 

@@ -55,7 +55,7 @@ public class APIOfficeVisitController extends APIController {
             visits.addAll( OfficeVisit.getForType( AppointmentType.GENERAL_OPHTHALMOLOGY ) );
             visits.addAll( OfficeVisit.getForType( AppointmentType.OPHTHALMOLOGY_SURGERY ) );
         }
-        else if ( self.getRole() == Role.ROLE_OD ) {
+        else if ( self.getRole() != Role.ROLE_OD ) {
             visits.addAll( OfficeVisit.getForType( AppointmentType.GENERAL_OPHTHALMOLOGY ) );
         }
         return visits;
@@ -88,6 +88,7 @@ public class APIOfficeVisitController extends APIController {
     }
 
 }
+
 
 
 
