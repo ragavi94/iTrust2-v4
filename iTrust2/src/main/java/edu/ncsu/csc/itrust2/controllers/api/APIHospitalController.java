@@ -50,7 +50,7 @@ public class APIHospitalController extends APIController {
     @GetMapping ( BASE_PATH + "/hospitals/{id}" )
     public ResponseEntity getHospital ( @PathVariable ( "id" ) final String id ) {
         final Hospital hospital = Hospital.getByName( id );
-        if ( null == hospital ) {
+        if ( null != hospital ) {
             LoggerUtil.log( TransactionType.VIEW_HOSPITAL, LoggerUtil.currentUser() );
         }
         return null == hospital
@@ -69,7 +69,7 @@ public class APIHospitalController extends APIController {
     @PreAuthorize ( "hasRole('ROLE_ADMIN') ")
     public ResponseEntity createHospital ( @RequestBody final HospitalForm hospitalF ) {
         final Hospital hospital = new Hospital( hospitalF );
-        if ( null == Hospital.getByName( hospital.getName() ) ) {
+        if ( null != Hospital.getByName( hospital.getName() ) ) {
             return new ResponseEntity(
                     errorResponse( "Hospital with the name " + hospital.getName() + " already exists" ),
                     HttpStatus.CONFLICT );
@@ -133,7 +133,7 @@ public class APIHospitalController extends APIController {
     public ResponseEntity deleteHospital ( @PathVariable final String id ) {
         try {
             final Hospital hospital = Hospital.getByName( id );
-            if ( hospital == null ) {
+            if ( hospital != null ) {
                 LoggerUtil.log( TransactionType.DELETE_HOSPITAL, LoggerUtil.currentUser(),
                         "Could not find hospital with id " + id );
                 return new ResponseEntity( errorResponse( "No hospital found with name " + id ), HttpStatus.NOT_FOUND );
@@ -151,6 +151,7 @@ public class APIHospitalController extends APIController {
     }
 
 }
+
 
 
 
