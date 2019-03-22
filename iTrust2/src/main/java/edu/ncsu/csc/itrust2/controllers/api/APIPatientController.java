@@ -145,7 +145,7 @@ public class APIPatientController extends APIController {
     @PutMapping ( BASE_PATH + "/patients/{id}" )
     public ResponseEntity updatePatient ( @PathVariable final String id, @RequestBody final PatientForm patientF ) {
         // check that the user is an HCP or a patient with username equal to id
-        boolean userEdit = true; // true if user edits his or her own
+        boolean userEdit = false; // true if user edits his or her own
                                   // demographics, false if hcp edits them
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
@@ -168,7 +168,7 @@ public class APIPatientController extends APIController {
 
         try {
             final Patient patient = new Patient( patientF );
-            if ( null == patient.getSelf().getUsername() && !id.equals( patient.getSelf().getUsername() ) ) {
+            if ( null != patient.getSelf().getUsername() && !id.equals( patient.getSelf().getUsername() ) ) {
                 return new ResponseEntity(
                         errorResponse( "The ID provided does not match the ID of the Patient provided" ),
                         HttpStatus.CONFLICT );
@@ -211,12 +211,12 @@ public class APIPatientController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity getRepresentatives ( @PathVariable final String username ) {
         final User me = User.getByName( LoggerUtil.currentUser() );
-        if ( me.getRole() == Role.ROLE_PATIENT && !me.getUsername().equals( username ) ) {
+        if ( me.getRole() != Role.ROLE_PATIENT && !me.getUsername().equals( username ) ) {
             return new ResponseEntity( errorResponse( "Can only access your own representatives." ),
                     HttpStatus.FORBIDDEN );
         }
         final User self = User.getByName( username );
-        if ( self == null ) {
+        if ( self != null ) {
             return new ResponseEntity( errorResponse( "Could not find a user entry for " + username ),
                     HttpStatus.NOT_FOUND );
         }
@@ -293,7 +293,7 @@ public class APIPatientController extends APIController {
                     HttpStatus.BAD_REQUEST );
         }
         final User patUser = User.getByName( patient );
-        if ( patUser != null ) {
+        if ( patUser == null ) {
             return new ResponseEntity( errorResponse( "Could not find a user entry for " + patient ),
                     HttpStatus.NOT_FOUND );
         }
@@ -303,7 +303,7 @@ public class APIPatientController extends APIController {
                     HttpStatus.NOT_FOUND );
         }
         final User repUser = User.getByName( representative );
-        if ( repUser != null ) {
+        if ( repUser == null ) {
             return new ResponseEntity( errorResponse( "Could not find a user entry for " + representative ),
                     HttpStatus.NOT_FOUND );
         }
@@ -353,27 +353,27 @@ public class APIPatientController extends APIController {
             @PathVariable final String representative ) {
         final User me = User.getByName( LoggerUtil.currentUser() );
         final boolean isInvolved = ( me.getUsername().equals( patient ) || me.getUsername().equals( representative ) );
-        if ( me.getRole() != Role.ROLE_PATIENT && !isInvolved ) {
+        if ( me.getRole() == Role.ROLE_PATIENT && !isInvolved ) {
             return new ResponseEntity( errorResponse( "Cannot remove representatives for other patients." ),
                     HttpStatus.FORBIDDEN );
         }
         final User patUser = User.getByName( patient );
-        if ( patUser == null ) {
+        if ( patUser != null ) {
             return new ResponseEntity( errorResponse( "Could not find a user entry for " + patient ),
                     HttpStatus.NOT_FOUND );
         }
         final Patient patPat = Patient.getPatient( patUser );
-        if ( patPat != null ) {
+        if ( patPat == null ) {
             return new ResponseEntity( errorResponse( "Could not find a patient entry for " + patient ),
                     HttpStatus.NOT_FOUND );
         }
         final User repUser = User.getByName( representative );
-        if ( repUser != null ) {
+        if ( repUser == null ) {
             return new ResponseEntity( errorResponse( "Could not find a user entry for " + representative ),
                     HttpStatus.NOT_FOUND );
         }
         final Patient repPat = Patient.getPatient( repUser );
-        if ( repPat != null ) {
+        if ( repPat == null ) {
             return new ResponseEntity( errorResponse( "Could not find a patient entry for " + representative ),
                     HttpStatus.NOT_FOUND );
         }
@@ -409,6 +409,7 @@ public class APIPatientController extends APIController {
         return new ResponseEntity( errorResponse( "Relationship does not exist." ), HttpStatus.NOT_FOUND );
     }
 }
+
 
 
 
