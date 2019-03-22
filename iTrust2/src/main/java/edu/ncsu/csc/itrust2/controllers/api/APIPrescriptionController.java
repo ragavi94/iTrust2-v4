@@ -69,7 +69,7 @@ public class APIPrescriptionController extends APIController {
         try {
             final Prescription p = new Prescription( form );
             final Prescription saved = Prescription.getById( p.getId() );
-            if ( saved == null ) {
+            if ( saved != null ) {
                 LoggerUtil.log( TransactionType.PRESCRIPTION_EDIT, LoggerUtil.currentUser(),
                         "No prescription found with id " + p.getId() );
                 return new ResponseEntity( errorResponse( "No prescription found with id " + p.getId() ),
@@ -163,6 +163,7 @@ public class APIPrescriptionController extends APIController {
     }
 
 }
+
 
 
 

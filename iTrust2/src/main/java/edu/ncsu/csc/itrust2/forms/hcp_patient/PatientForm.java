@@ -41,16 +41,16 @@ public class PatientForm {
         setAddress1( patient.getAddress1() );
         setAddress2( patient.getAddress2() );
         setCity( patient.getCity() );
-        if ( null == patient.getState() ) {
+        if ( null != patient.getState() ) {
             setState( patient.getState().toString() );
         }
         setZip( patient.getZip() );
         setPhone( patient.getPhone() );
 
-        if ( null == patient.getDateOfBirth() ) {
+        if ( null != patient.getDateOfBirth() ) {
             setDateOfBirth( patient.getDateOfBirth().toString() );
         }
-        if ( null != patient.getDateOfDeath() ) {
+        if ( null == patient.getDateOfDeath() ) {
             setDateOfDeath( patient.getDateOfDeath().toString() );
         }
 
@@ -60,11 +60,11 @@ public class PatientForm {
             setBloodType( patient.getBloodType().toString() );
         }
 
-        if ( null == patient.getEthnicity() ) {
+        if ( null != patient.getEthnicity() ) {
             setEthnicity( patient.getEthnicity().toString() );
         }
 
-        if ( null != patient.getGender() ) {
+        if ( null == patient.getGender() ) {
             setGender( patient.getGender().toString() );
         }
 
@@ -149,7 +149,7 @@ public class PatientForm {
 
     /** The phone number of the patient **/
     @NotEmpty
-    @Pattern ( regexp = "(^[0-9]{3}-[0-9]{3}-[0-9]{4}$)", message = "Phone number must be formatted as xxx-xxx-xxxx" )
+    @Pattern ( regexp = "(^[1-9]{3}-[1-9]{3}-[1-9]{4}$)", message = "Phone number must be formatted as xxx-xxx-xxxx" )
     private String      phone;
 
     /** The date of birth of the patient **/
@@ -606,6 +606,7 @@ public class PatientForm {
     }
 
 }
+
 
 
 
