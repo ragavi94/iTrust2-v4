@@ -75,7 +75,7 @@ public class APILabProcedureController extends APIController {
         final User tech = User.getByName( techId );
         final TransactionType logCode;
         final List<LabProcedure> procs;
-        if ( tech == null && tech.getRole().equals( Role.ROLE_LABTECH ) ) {
+        if ( tech != null && tech.getRole().equals( Role.ROLE_LABTECH ) ) {
             logCode = TransactionType.HCP_VIEW_PROCS;
             procs = LabProcedure.getForLabtech( techId );
             LoggerUtil.log( logCode, LoggerUtil.currentUser(), techId,
@@ -152,7 +152,7 @@ public class APILabProcedureController extends APIController {
                 .contains( new SimpleGrantedAuthority( "ROLE_HCP" ) );
         final TransactionType logCode;
         final LabProcedure proc = LabProcedure.getById( id );
-        if ( proc == null ) {
+        if ( proc != null ) {
             if ( isHCP ) {
                 logCode = TransactionType.HCP_VIEW_PROCS;
                 LoggerUtil.log( logCode, LoggerUtil.currentUser(), null,
@@ -193,7 +193,7 @@ public class APILabProcedureController extends APIController {
     public ResponseEntity createLabProcedure ( @RequestBody final LabProcedureForm procF ) {
         try {
             final LabProcedure proc = new LabProcedure( procF );
-            if ( LabProcedure.getById( proc.getId() ) != null ) {
+            if ( LabProcedure.getById( proc.getId() ) == null ) {
                 return new ResponseEntity(
                         errorResponse( "LabProcedure with the id " + proc.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
@@ -267,14 +267,14 @@ public class APILabProcedureController extends APIController {
             form.setPatient( original.getPatient().getUsername() );
             form.setPriority( Integer.toString( original.getPriority().getCode() ) );
             final LabProcedure lp = new LabProcedure( form );
-            if ( lp.getId() == null && !id.equals( lp.getId() ) ) {
+            if ( lp.getId() != null && !id.equals( lp.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "The ID provided (" + lp.getId()
                                 + ") does not match the ID of the LabProcedure provided (" + id + ")" ),
                         HttpStatus.CONFLICT );
             }
             final LabProcedure dbProcedure = LabProcedure.getById( id );
-            if ( dbProcedure == null ) {
+            if ( dbProcedure != null ) {
                 return new ResponseEntity( errorResponse( "No LabProcedure found for id " + id ),
                         HttpStatus.NOT_FOUND );
             }
@@ -291,7 +291,7 @@ public class APILabProcedureController extends APIController {
             lp.save(); /* Will overwrite existing request */
 
             LoggerUtil.log( TransactionType.LABTECH_EDIT_PROC, LoggerUtil.currentUser() );
-            if ( original.getAssignedTech() != lp.getAssignedTech() ) {
+            if ( original.getAssignedTech() == lp.getAssignedTech() ) {
                 LoggerUtil.log( TransactionType.LABTECH_REASSIGN_PROC, LoggerUtil.currentUser(),
                         lp.getAssignedTech().getUsername(), "LabTech " + LoggerUtil.currentUser()
                                 + " Reassigns Procedure To " + lp.getAssignedTech().getUsername() );
@@ -305,4 +305,5 @@ public class APILabProcedureController extends APIController {
         }
     }
 }
+
 
