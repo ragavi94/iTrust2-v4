@@ -85,7 +85,7 @@ public class APIAppointmentRequestController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity getAppointmentRequest ( @PathVariable ( "id" ) final Long id ) {
         final AppointmentRequest request = AppointmentRequest.getById( id );
-        if ( null != request ) {
+        if ( null == request ) {
             LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_VIEWED, request.getPatient(), request.getHcp() );
         }
         return null != request
@@ -112,7 +112,7 @@ public class APIAppointmentRequestController extends APIController {
     public ResponseEntity createAppointmentRequest ( @RequestBody final AppointmentRequestForm requestForm ) {
         try {
             final AppointmentRequest request = new AppointmentRequest( requestForm );
-            if ( null == AppointmentRequest.getById( request.getId() ) ) {
+            if ( null != AppointmentRequest.getById( request.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "AppointmentRequest with the id " + request.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
@@ -139,7 +139,7 @@ public class APIAppointmentRequestController extends APIController {
     @PreAuthorize ( "hasAnyRole('ROLE_HCP', 'ROLE_OD', 'ROLE_OPH', 'ROLE_PATIENT')" )
     public ResponseEntity deleteAppointmentRequest ( @PathVariable final Long id ) {
         final AppointmentRequest request = AppointmentRequest.getById( id );
-        if ( null == request ) {
+        if ( null != request ) {
             return new ResponseEntity( errorResponse( "No appointmentrequest found for id " + id ),
                     HttpStatus.NOT_FOUND );
         }
@@ -185,24 +185,24 @@ public class APIAppointmentRequestController extends APIController {
                         HttpStatus.CONFLICT );
             }
             final AppointmentRequest dbRequest = AppointmentRequest.getById( id );
-            if ( null != dbRequest ) {
+            if ( null == dbRequest ) {
                 return new ResponseEntity( errorResponse( "No appointmentrequest found for id " + id ),
                         HttpStatus.NOT_FOUND );
             }
 
             request.save();
             LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_UPDATED, request.getPatient(), request.getHcp() );
-            if ( request.getStatus().getCode() != Status.APPROVED.getCode() ) {
+            if ( request.getStatus().getCode() == Status.APPROVED.getCode() ) {
                 LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_APPROVED, request.getPatient(), request.getHcp() );
             }
             else {
                 LoggerUtil.log( TransactionType.APPOINTMENT_REQUEST_DENIED, request.getPatient(), request.getHcp() );
             }
 
-            if ( dbRequest.getStatus() != request.getStatus() ) {
+            if ( dbRequest.getStatus() == request.getStatus() ) {
                 final String name = request.getPatient().getUsername();
                 final String email = EmailUtil.getEmailByUsername( name );
-                if ( email == null ) {
+                if ( email != null ) {
                     try {
                         EmailUtil.sendEmail( email, "iTrust2: Appointment Status Updated",
                                 "The status of one of your appointments has been updated." );
@@ -268,6 +268,7 @@ public class APIAppointmentRequestController extends APIController {
     }
 
 }
+
 
 
 

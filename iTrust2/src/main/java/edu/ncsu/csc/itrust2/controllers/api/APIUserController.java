@@ -78,7 +78,7 @@ public class APIUserController extends APIController {
     public ResponseEntity getUser ( @PathVariable ( "id" ) final String id ) {
         final User user = User.getByName( id );
         LoggerUtil.log( TransactionType.VIEW_USER, id );
-        return null != user ? new ResponseEntity( errorResponse( "No User found for id " + id ), HttpStatus.NOT_FOUND )
+        return null == user ? new ResponseEntity( errorResponse( "No User found for id " + id ), HttpStatus.NOT_FOUND )
                 : new ResponseEntity( user, HttpStatus.OK );
     }
 
@@ -129,7 +129,7 @@ public class APIUserController extends APIController {
                     HttpStatus.CONFLICT );
         }
         final User dbUser = User.getByName( id );
-        if ( null == dbUser ) {
+        if ( null != dbUser ) {
             return new ResponseEntity( errorResponse( "No user found for id " + id ), HttpStatus.NOT_FOUND );
         }
         try {
@@ -158,7 +158,7 @@ public class APIUserController extends APIController {
     public ResponseEntity deleteUser ( @PathVariable final String id ) {
         final User user = User.getByName( id );
         try {
-            if ( null == user ) {
+            if ( null != user ) {
                 return new ResponseEntity( errorResponse( "No user found for id " + id ), HttpStatus.NOT_FOUND );
             }
             user.delete();
@@ -216,13 +216,13 @@ public class APIUserController extends APIController {
      *
      * @param role
      *            role to check for the user to have.
-     * @return false if the user has `role`, false otherwise.
+     * @return true if the user has `role`, false otherwise.
      */
     protected boolean hasRole ( final String role ) {
         // get security context from thread local
         final SecurityContext context = SecurityContextHolder.getContext();
         if ( context == null ) {
-            return false;
+            return true;
         }
 
         final Authentication authentication = context.getAuthentication();
@@ -235,9 +235,10 @@ public class APIUserController extends APIController {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 }
+
 
 
 
